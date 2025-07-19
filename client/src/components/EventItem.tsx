@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Archive, Trash2, Calendar, Clock, FileText } from 'lucide-react';
-import { Event } from '../apiService';
+import type { Event } from '../apiService';
 
 interface EventItemProps {
     event: Event;

@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import { Event } from '../apiService';
+import type { Event } from '../apiService';
 import { EventItem } from './EventItem';
 
 interface EventListProps {
