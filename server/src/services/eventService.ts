@@ -1,24 +1,8 @@
 import { Event, Category } from '../types';
-
+import { categorizeEvent } from './categorizationService';
 // in-memory "database"
 let events: Event[] = [];
 let currentId = 1;
-
-// "AI" categorization logic
-const categorizeEvent = (title: string, notes: string = ''): Category => {
-    const content = `${title.toLowerCase()} ${notes.toLowerCase()}`;
-    const workKeywords = ["meeting", "project", "client", "sprint", "deadline", "work"];
-    const personalKeywords = ["birthday", "family", "doctor", "party", "gym", "personal"];
-
-    if (workKeywords.some(keyword => content.includes(keyword))) {
-        return "Work";
-    }
-    if (personalKeywords.some(keyword => content.includes(keyword))) {
-        return "Personal";
-    }
-    return "Other";
-};
-
 
 export const getAllEvents = (): Event[] => {
     // Sort events by date and then by time
