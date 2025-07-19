@@ -42,9 +42,9 @@ export const EventItem = ({ event, onArchive, onDelete }: EventItemProps) => {
                 </div>
                 <div className="flex flex-col space-y-2 ml-4">
                     {!event.archived && (
-                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => onArchive(event.id)} className="p-2 bg-yellow-400 text-white rounded-full hover:bg-yellow-500"><Archive size={16} /></motion.button>
+                        <motion.button title="Archive" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => onArchive(event.id)} className="p-2 bg-yellow-400 text-white rounded-full hover:bg-yellow-500"><Archive size={16} /></motion.button>
                     )}
-                    <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => onDelete(event.id)} className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600"><Trash2 size={16} /></motion.button>
+                    <motion.button title="Delete" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => onDelete(event.id)} className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600"><Trash2 size={16} /></motion.button>
                 </div>
             </div>
         </motion.div>

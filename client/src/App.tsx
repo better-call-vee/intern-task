@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Event } from './apiService';
+import type { Event, Category } from './apiService';
 import { getEvents, createEvent, archiveEvent, deleteEvent } from './apiService';
 import { EventForm } from './components/EventForm';
 import { EventList } from './components/EventList';
@@ -7,6 +7,7 @@ import { CalendarDays } from 'lucide-react';
 
 function App() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [activeFilter, setActiveFilter] = useState<Category | 'All'>('All');
   const [error, setError] = useState<string | null>(null);
 
   const fetchEvents = async () => {
@@ -45,6 +46,14 @@ function App() {
     } catch (err) { setError('Failed to delete event.') }
   };
 
+  const filteredEvents = events.filter(event => {
+    if (activeFilter === 'All') return true;
+    return event.category === activeFilter;
+  });
+
+  const filterButtons: (Category | 'All')[] = ['All', 'Work', 'Personal', 'Other'];
+
+
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
       <header className="bg-white shadow-sm sticky top-0 z-10">
@@ -59,8 +68,25 @@ function App() {
       <main className="py-8">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <EventForm onAddEvent={handleAddEvent} />
+
+          <div className="my-6 flex items-center justify-center space-x-2">
+            {filterButtons.map(filter => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors duration-300 ${activeFilter === filter
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-200'
+                  }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+
           {error && <p className="text-center text-red-500 bg-red-100 p-3 rounded-md mb-4">{error}</p>}
-          <EventList events={events} onArchive={handleArchiveEvent} onDelete={handleDeleteEvent} />
+
+          <EventList events={filteredEvents} onArchive={handleArchiveEvent} onDelete={handleDeleteEvent} />
         </div>
       </main>
     </div>
