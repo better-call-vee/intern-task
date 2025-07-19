@@ -6,7 +6,7 @@ A full-stack event scheduling application built with React, Node.js, TypeScript,
 
 ### ✨ Live Demo
 
-**[]** 👈
+**[https://intern-task-ashy.vercel.app/]** 👈
 
 ---
 
