@@ -115,7 +115,6 @@ let events: Event[] = [
 let currentId = 13;
 
 export const getAllEvents = (): Event[] => {
-    // Sort events by date and then by time
     return [...events].sort((a, b) => {
         const dateTimeA = new Date(`${a.date}T${a.time}`);
         const dateTimeB = new Date(`${b.date}T${b.time}`);
@@ -151,5 +150,5 @@ export const archiveEvent = (id: string): Event | null => {
 export const deleteEvent = (id: string): boolean => {
     const initialLength = events.length;
     events = events.filter(event => event.id !== id);
-    return events.length < initialLength; // true if an event was deleted
+    return events.length < initialLength; 
 };

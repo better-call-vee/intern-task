@@ -4,6 +4,7 @@ import { getEvents, createEvent, archiveEvent, deleteEvent } from './apiService'
 import { EventForm } from './components/EventForm';
 import { EventList } from './components/EventList';
 import { CalendarDays } from 'lucide-react';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 function App() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -17,11 +18,9 @@ function App() {
       setEvents(fetchedEvents);
     } catch (err) {
       setError('Failed to load events. Is the backend server running?');
-      console.error(err);
     }
   };
 
-  
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -29,22 +28,53 @@ function App() {
   const handleAddEvent = async (newEventData: { title: string; date: string; time: string; notes?: string }) => {
     try {
       await createEvent(newEventData);
-      fetchEvents();
+      await fetchEvents();
+      Swal.fire({
+        title: 'Success!',
+        text: 'Your event has been created.',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false,
+      });
     } catch (err) { setError('Failed to create event.') }
   };
 
   const handleArchiveEvent = async (id: string) => {
     try {
       await archiveEvent(id);
-      fetchEvents();
+      await fetchEvents();
+      Swal.fire({
+        title: 'Archived!',
+        text: 'The event has been moved to archives.',
+        icon: 'info',
+        timer: 1500,
+        showConfirmButton: false,
+      });
     } catch (err) { setError('Failed to archive event.') }
   };
 
   const handleDeleteEvent = async (id: string) => {
-    try {
-      await deleteEvent(id);
-      fetchEvents();
-    } catch (err) { setError('Failed to delete event.') }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteEvent(id);
+          await fetchEvents();
+          Swal.fire(
+            'Deleted!',
+            'Your event has been deleted.',
+            'success'
+          );
+        } catch (err) { setError('Failed to delete event.') }
+      }
+    });
   };
 
   const filteredEvents = events.filter(event => {
@@ -53,7 +83,6 @@ function App() {
   });
 
   const filterButtons: (Category | 'All')[] = ['All', 'Work', 'Personal', 'Other'];
-
 
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
@@ -76,8 +105,8 @@ function App() {
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
                 className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors duration-300 ${activeFilter === filter
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-200'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-200'
                   }`}
               >
                 {filter}
